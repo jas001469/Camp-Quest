@@ -52,6 +52,8 @@ db.once("open", () => {
 //     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 // }
 
+const maxDuration= 300
+
 const app = express();
 
 app.engine('ejs', ejsMate)
