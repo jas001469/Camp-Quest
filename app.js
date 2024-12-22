@@ -14,9 +14,10 @@ const passport=require('passport')
 const LocalStrategy=require('passport-local')
 const User=require('./models/user')
 //const helmet = require('helmet')
-const dbUrl= process.env.DB_URL|| 'mongodb://127.0.0.1:27017/yelp-camp';
+const dbUrl= 'mongodb://127.0.0.1:27017/yelp-camp';
 // process.env.DB_URL
 const MongoStore = require('connect-mongo')
+const PORT = 1313;
 
 
 //const mongoSanitize = require('express-mongo-sanitize');
@@ -166,9 +167,9 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err })
 })
 
-app.listen(1313, () => {
+app.listen(PORT, () => {
     //  console.log(dbUrl)
-    console.log('Serving on port 1313')
+    console.log('Serving on port 1313',PORT)
     //run()
 })
 
