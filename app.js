@@ -8,11 +8,11 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
-const ExpressError = require('../utils/ExpressError');
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport=require('passport')
 const LocalStrategy=require('passport-local')
-const User=require('../models/user')
+const User=require('./models/user')
 //const helmet = require('helmet')
 const dbUrl= 'mongodb://127.0.0.1:27017/yelp-camp';
 // process.env.DB_URL
@@ -22,9 +22,9 @@ const PORT = 1313;
 
 //const mongoSanitize = require('express-mongo-sanitize');
 
-const userRoutes=require('../routes/users')
-const campgroundRoutes = require('../routes/campgrounds');
-const reviewRoutes = require('../routes/reviews');
+const userRoutes=require('./routes/users')
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
 const { register } = require('module');
 const { name } = require('ejs');
  //"mongodb://127.0.0.1:27017/yelp-camp"
