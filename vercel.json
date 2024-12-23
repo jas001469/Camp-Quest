@@ -12,9 +12,7 @@
       }
     ],
     "functions": {
-      "api/app.js": {
         "maxDuration": 30
-      }
     }
   }
 
