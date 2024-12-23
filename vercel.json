@@ -11,9 +11,10 @@
         "dest": "api/app.js"
       }
     ],
-    "functions": {
-        "maxDuration": 30
-    }
+    "functions": [
+        {"maxDuration": 30
+        }
+      ]
   }
 
  
