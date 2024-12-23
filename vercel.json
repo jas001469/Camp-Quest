@@ -1,7 +1,7 @@
 
   {
     "functions": {
-      "api/app.js": {
+      "/api/app.js": {
         "maxDuration": 30
       }
     }
