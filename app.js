@@ -13,8 +13,12 @@ const methodOverride = require('method-override');
 const passport=require('passport')
 const LocalStrategy=require('passport-local')
 const User=require('./models/user')
+const compression = require('compression');
+
+
 //const helmet = require('helmet')
-const dbUrl= 'mongodb://127.0.0.1:27017/yelp-camp';
+// const dbUrl= 'mongodb://127.0.0.1:27017/yelp-camp';
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
 // process.env.DB_URL
 const MongoStore = require('connect-mongo')
 const PORT = 1313;
@@ -55,27 +59,41 @@ db.once("open", () => {
 const maxDuration= 300
 
 const app = express();
-
+app.use(express.static(path.join(__dirname, 'public')))
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
-
+app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')))
+
 //app.use(mongoSanitize())
 
-const store =  MongoStore.create({
-    mongoUrl:dbUrl,
-    touchAfter: 24*60*60,
-    crypto: {
-        secret: 'thisshouldbeabettersecret!'
-    }
-})
+// const store =  MongoStore.create({
+//     mongoUrl:dbUrl,
+//     touchAfter: 24*60*60,
+//     crypto: {
+//         secret: 'thisshouldbeabettersecret!'
+//     }
+// })
 
-store.on('error',function(e){
-    console.log("Session Store Error",e)
-})
+// store.on('error',function(e){
+//     console.log("Session Store Error",e)
+// })
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!',
+    },
+    autoReconnect: true,
+});
+
+store.on('error', (e) => {
+    console.error('Session Store Error:', e);
+});
+
 
 const sessionConfig = {
     store,
@@ -142,6 +160,18 @@ app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
+
+app.use((err, req, res, next) => {
+    const { statusCode = 500, message } = err;
+    console.error(`Error ${statusCode}: ${message}`);
+    res.status(statusCode).render('error', { err });
+});
+
+app.get('/long-process', async (req, res) => {
+    setTimeout(() => {
+        res.send('Completed long process!');
+    }, 5000); // Ensure this completes within Vercel's limits.
+});
 
 app.use((req, res, next) => {
 
