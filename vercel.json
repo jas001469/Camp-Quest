@@ -1,13 +1,9 @@
-
 {
   "version": 2,
   "builds": [
     {
       "src": "app.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "50mb"  
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -19,13 +15,8 @@
   "env": {
     "DB_URL": "mongodb://127.0.0.1:27017/yelp-camp",
     "SESSION_SECRET": "thisshouldbeabettersecret!"
-  },           
-  "functions": {
-    "app.js": {
-      "memory": 1024,               
-      "maxDuration": 10            
-    }
   }
 }
+
 
   
