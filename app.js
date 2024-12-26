@@ -13,6 +13,7 @@ const methodOverride = require('method-override');
 const passport=require('passport')
 const LocalStrategy=require('passport-local')
 const User=require('./models/user')
+const cors = require('cors')
 const compression = require('compression');
 
 
@@ -41,26 +42,28 @@ db.once("open", () => {
 });
 
 
-// const client=new MongoClient(dbUrl,{
-//     serverApi:{
-//         version: ServerApiVersion.v1,
-//         strict: true,
-//         deprecationErrors: true,
-//       }
-// })
+const client=new MongoClient(dbUrl,{
+    serverApi:{
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      }
+})
 
-// async function run(){
-//     await client.connect();
-//     // Send a ping to confirm a successful connection
-//     await client.db("admin").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-// }
+async function run(){
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+}
 
 const maxDuration= 300
 
 const app = express();
+
 app.use(express.static(path.join(__dirname, 'public')))
 app.engine('ejs', ejsMate)
+app.use(cors())
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(compression());
@@ -200,8 +203,8 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(PORT, () => {
-    //  console.log(dbUrl)
+     console.log(dbUrl)
     console.log('Serving on port 1313',PORT)
-    //run()
+    run()
 })
 
